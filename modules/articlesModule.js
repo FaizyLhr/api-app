@@ -10,6 +10,13 @@ const articleSchema = new Schema({
 		lowercase: true,
 	},
 	feild: String,
+	likes: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
+	comments: [
+		{
+			text: String,
+			postedBy: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
+		},
+	],
 	id: {
 		type: Number,
 		default: 1,
@@ -17,6 +24,9 @@ const articleSchema = new Schema({
 		unique: true,
 	},
 	pubyear: { type: Number, default: 1998, required: true },
+	followers: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
+	following: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
+	favorites: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
 });
 
 const articles = mongoose.model("Article", articleSchema);

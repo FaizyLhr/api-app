@@ -45,6 +45,110 @@ router.post("/login", async (req, res, next) => {
 });
 
 router.put(
+	"/like",
+	passport.authenticate("jwt", { session: false }),
+	(req, res) => {
+		articleModel
+			.findByIdAndUpdate(
+				req.body.articleId,
+				{
+					// $push: { likes: req.params.id },
+					$push: { likes: req.user._id },
+				},
+				{
+					new: true,
+				}
+			)
+			.exec((err, result) => {
+				if (err) {
+					return res.status(422).json({ error: err });
+				} else {
+					res.json(result);
+				}
+			});
+	}
+);
+
+router.put(
+	"/unlike",
+	passport.authenticate("jwt", { session: false }),
+	(req, res) => {
+		articleModel
+			.findByIdAndUpdate(
+				req.body.articleId,
+				{
+					// $pull: { likes: req.params.id },
+					$pull: { likes: req.user._id },
+				},
+				{
+					new: true,
+				}
+			)
+			.exec((err, result) => {
+				if (err) {
+					return res.status(422).json({ error: err });
+				} else {
+					res.json(result);
+				}
+			});
+	}
+);
+
+router.put(
+	"/comment",
+	passport.authenticate("jwt", { session: false }),
+	(req, res) => {
+		const comment = {
+			text: req.body.text,
+			postedBy: req.user._id,
+		};
+		Post.findByIdAndUpdate(
+			req.body.articleId,
+			{
+				$push: { comments: comment },
+			},
+			{
+				new: true,
+			}
+		)
+			.populate("comments.postedBy", "_id name")
+			.populate("postedBy", "_id name")
+			.exec((err, result) => {
+				if (err) {
+					return res.status(422).json({ error: err });
+				} else {
+					res.json(result);
+				}
+			});
+	}
+);
+
+router.put(
+	"/favorite",
+	passport.authenticate("jwt", { session: false }),
+	(req, res) => {
+		articleModel
+			.findByIdAndUpdate(
+				req.body.articleId,
+				{
+					// $push: { likes: req.params.id },
+					$push: { likes: req.user._id },
+				},
+				{
+					new: true,
+				}
+			)
+			.exec((err, result) => {
+				if (err) {
+					return res.status(422).json({ error: err });
+				} else {
+					res.json(result);
+				}
+			});
+	}
+);
+
+router.put(
 	"/follow",
 	passport.authenticate("jwt", { session: false }),
 	(req, res) => {
@@ -79,6 +183,7 @@ router.put(
 		);
 	}
 );
+
 router.put(
 	"/unfollow",
 	passport.authenticate("jwt", { session: false }),

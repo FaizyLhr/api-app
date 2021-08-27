@@ -19,6 +19,7 @@ const userSchema = new Schema({
 	interest: String,
 	followers: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
 	following: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
+	// favorites: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
 	// following: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
 });
 
